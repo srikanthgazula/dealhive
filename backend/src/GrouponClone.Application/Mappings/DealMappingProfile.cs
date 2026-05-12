@@ -11,7 +11,9 @@ public class DealMappingProfile : Profile
         CreateMap<Deal, DealSummaryResponse>()
             .ForMember(d => d.DiscountPercent, opt => opt.MapFrom(s => s.GetDiscountPercent()))
             .ForMember(d => d.PrimaryImageUrl, opt => opt.MapFrom(s =>
-                s.Images.FirstOrDefault(i => i.IsPrimary)!.Url ?? s.Images.FirstOrDefault()!.Url))
+                s.Images.Where(i => i.IsPrimary).Select(i => i.Url).FirstOrDefault()
+                ?? s.Images.Select(i => i.Url).FirstOrDefault()
+                ?? ""))
             .ForMember(d => d.VendorName, opt => opt.MapFrom(s => s.Vendor.BusinessName))
             .ForMember(d => d.VendorCity, opt => opt.MapFrom(s => s.Vendor.City))
             .ForMember(d => d.CategoryName, opt => opt.MapFrom(s => s.Category.Name))

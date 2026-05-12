@@ -38,7 +38,7 @@ public class RegisterVendorCommandHandler : IRequestHandler<RegisterVendorComman
 
         var slug = GenerateSlug(req.BusinessName);
         var existing = await _db.Vendors.AnyAsync(v => v.Slug == slug, ct);
-        if (existing) slug = $"{slug}-{Guid.NewGuid():N[..6]}";
+        if (existing) slug = $"{slug}-{Guid.NewGuid().ToString("N")[..6]}";
 
         var vendor = Vendor.Create(userId, req.BusinessName, slug, req.AddressLine1,
             req.Description, req.PhoneNumber, req.CategoryId);
