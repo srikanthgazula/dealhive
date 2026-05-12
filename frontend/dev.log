@@ -1,0 +1,252 @@
+
+> dealhive-frontend@1.0.0 dev
+> next dev
+
+  ▲ Next.js 14.2.35
+  - Local:        http://localhost:3000
+
+ ✓ Starting...
+ ✓ Ready in 2.7s
+ ○ Compiling / ...
+ ✓ Compiled / in 7s (1025 modules)
+ ✓ Compiled in 641ms (474 modules)
+ GET / 200 in 7819ms
+ ○ Compiling /login ...
+ ✓ Compiled /login in 5.4s (1034 modules)
+ GET /login 200 in 5671ms
+ ✓ Compiled /signup in 312ms (1040 modules)
+ GET /signup 200 in 433ms
+ ✓ Compiled /local in 279ms (1043 modules)
+ GET /local 200 in 491ms
+ ✓ Compiled /local/beauty-and-spas in 305ms (1045 modules)
+ GET /local/beauty-and-spas 200 in 549ms
+ ✓ Compiled /local/things-to-do in 428ms (1047 modules)
+ GET /local/things-to-do 200 in 598ms
+ ○ Compiling /local/automotive ...
+ ✓ Compiled /local/automotive in 650ms (1049 modules)
+ GET /local/automotive 200 in 927ms
+ ✓ Compiled /local/food-and-drink in 365ms (1051 modules)
+ GET /local/food-and-drink 200 in 521ms
+ ✓ Compiled /travel in 390ms (1053 modules)
+ GET /travel 200 in 567ms
+ ✓ Compiled /goods in 367ms (1055 modules)
+ GET /goods 200 in 501ms
+ ✓ Compiled /gift in 364ms (1057 modules)
+ GET /gift 200 in 480ms
+ ✓ Compiled /search in 386ms (1059 modules)
+ GET /search 200 in 515ms
+ GET /search?q=spa 200 in 234ms
+ ○ Compiling /wishlist ...
+ ✓ Compiled /wishlist in 1255ms (1067 modules)
+ GET /wishlist 200 in 1397ms
+ ○ Compiling /account/groupons ...
+ ✓ Compiled /account/groupons in 656ms (1086 modules)
+ GET /account/groupons 200 in 770ms
+ ○ Compiling /deals/[slug] ...
+ ✓ Compiled /deals/[slug] in 578ms (1106 modules)
+ GET /deals/chicago-architecture-boat-tour-90-min 200 in 1376ms
+ ○ Compiling /cart ...
+ ✓ Compiled /cart in 643ms (1120 modules)
+ GET /cart 200 in 833ms
+ GET /login 200 in 86ms
+ GET /signup 200 in 64ms
+ GET /account/groupons 200 in 67ms
+ GET /local 200 in 128ms
+ GET /local/beauty-and-spas 200 in 57ms
+ GET / 200 in 67ms
+ GET /login 200 in 51ms
+ GET /signup 200 in 34ms
+ GET /local 200 in 67ms
+ GET /local/beauty-and-spas 200 in 54ms
+ GET /local/things-to-do 200 in 81ms
+ GET /local/automotive 200 in 33ms
+ GET /local/food-and-drink 200 in 82ms
+ GET /travel 200 in 68ms
+ GET /goods 200 in 83ms
+ GET /gift 200 in 76ms
+ GET /search 200 in 64ms
+ GET /wishlist 200 in 93ms
+ GET /account/groupons 200 in 63ms
+ GET /cart 200 in 34ms
+ GET /goods 200 in 64ms
+ GET /cart 200 in 60ms
+ ✓ Compiled in 1684ms (1089 modules)
+ ○ Compiling /local/beauty-and-spas ...
+ ✓ Compiled /local/beauty-and-spas in 700ms (577 modules)
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1510021711994-93f8f22ea147?w=800 404
+ ✓ Compiled /deals/[slug] in 362ms (589 modules)
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1510021711994-93f8f22ea147?w=800 404
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1510021711994-93f8f22ea147?w=800 404
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1510021711994-93f8f22ea147?w=800 404
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1510021711994-93f8f22ea147?w=800 404
+ ✓ Compiled in 951ms (1094 modules)
+ ✓ Compiled in 587ms (1094 modules)
+ ✓ Compiled in 2s (1102 modules)
+ GET /deals/spa-world-centreville-all-day-relaxation 200 in 295ms
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1510021711994-93f8f22ea147?w=800 404
+ GET /deals/spa-world-centreville-all-day-relaxation 200 in 72ms
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1510021711994-93f8f22ea147?w=800 404
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1510021711994-93f8f22ea147?w=800 404
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1510021711994-93f8f22ea147?w=800 404
+ ✓ Compiled in 2s (1102 modules)
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1510021711994-93f8f22ea147?w=800 404
+ ✓ Compiled in 346ms (518 modules)
+ ✓ Compiled in 1093ms (1109 modules)
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1510021711994-93f8f22ea147?w=800 404
+ GET / 200 in 234ms
+ GET /local/beauty-and-spas 200 in 102ms
+ GET / 200 in 124ms
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1510021711994-93f8f22ea147?w=800 404
+ GET / 200 in 201ms
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1510021711994-93f8f22ea147?w=800 404
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1510021711994-93f8f22ea147?w=800 404
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1510021711994-93f8f22ea147?w=800 404
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1510021711994-93f8f22ea147?w=800 404
+ GET / 200 in 89ms
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1510021711994-93f8f22ea147?w=800 404
+ ✓ Compiled in 755ms (1109 modules)
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1510021711994-93f8f22ea147?w=800 404
+ ✓ Compiled in 357ms (1109 modules)
+ ✓ Compiled in 453ms (1109 modules)
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1510021711994-93f8f22ea147?w=800 404
+ ○ Compiling /local/things-to-do ...
+ ✓ Compiled /local/things-to-do in 546ms (590 modules)
+ ✓ Compiled /local/automotive in 221ms (592 modules)
+ ✓ Compiled in 841ms (1107 modules)
+ ○ Compiling /_not-found ...
+ ✓ Compiled /_not-found in 700ms (1096 modules)
+ GET /local/car-wash 404 in 162ms
+ GET /local/automotive 200 in 80ms
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1510021711994-93f8f22ea147?w=800 404
+ GET /local/massage 404 in 48ms
+ ✓ Compiled /local in 415ms (588 modules)
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1510021711994-93f8f22ea147?w=800 404
+ ✓ Compiled /_not-found in 413ms (1098 modules)
+ GET /local/massage 404 in 199ms
+ GET /local/beauty-and-spas 200 in 171ms
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1510021711994-93f8f22ea147?w=800 404
+ GET /local/skin-care 404 in 60ms
+ GET /local/beauty-and-spas 200 in 122ms
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1510021711994-93f8f22ea147?w=800 404
+ GET /local/nail-salons 404 in 59ms
+ GET /local/beauty-and-spas 200 in 83ms
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1510021711994-93f8f22ea147?w=800 404
+ GET /local/hair-salons 404 in 61ms
+ GET /local/beauty-and-spas 200 in 90ms
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1510021711994-93f8f22ea147?w=800 404
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1510021711994-93f8f22ea147?w=800 404
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1510021711994-93f8f22ea147?w=800 404
+ ✓ Compiled /cart in 266ms (581 modules)
+ ✓ Compiled in 2.7s (1095 modules)
+ ✓ Compiled in 1233ms (1095 modules)
+ ✓ Compiled in 2.3s (1095 modules)
+ ✓ Compiled / in 414ms (580 modules)
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1510021711994-93f8f22ea147?w=800 404
+ ○ Compiling /checkout ...
+ ✓ Compiled /checkout in 923ms (1105 modules)
+ ✓ Compiled in 1525ms (1103 modules)
+ ✓ Compiled in 437ms (526 modules)
+ ✓ Compiled in 418ms (526 modules)
+ ✓ Compiled in 1907ms (1103 modules)
+ ✓ Compiled in 360ms (526 modules)
+ ✓ Compiled in 3.8s (1117 modules)
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1510021711994-93f8f22ea147?w=800 404
+ ✓ Compiled /deals/[slug] in 398ms (600 modules)
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1510021711994-93f8f22ea147?w=800 404
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1510021711994-93f8f22ea147?w=800 404
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1510021711994-93f8f22ea147?w=800 404
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1510021711994-93f8f22ea147?w=800 404
+ ✓ Compiled in 1257ms (1134 modules)
+ ✓ Compiled in 408ms (534 modules)
+ ✓ Compiled in 788ms (1103 modules)
+ ⨯ src\app\layout.tsx (27:12) @ Navbar
+ ⨯ ReferenceError: Navbar is not defined
+    at RootLayout (./src/app/layout.tsx:35:97)
+    at stringify (<anonymous>)
+digest: "2869460884"
+[0m [90m 25 |[39m       [33m<[39m[33mbody[39m className[33m=[39m[32m"bg-[#F5F5F5] text-[#1A1A1A] antialiased"[39m[33m>[39m[0m
+[0m [90m 26 |[39m         [33m<[39m[33mProviders[39m[33m>[39m[0m
+[0m[31m[1m>[22m[39m[90m 27 |[39m           [33m<[39m[33mNavbar[39m [33m/[39m[33m>[39m[0m
+[0m [90m    |[39m            [31m[1m^[22m[39m[0m
+[0m [90m 28 |[39m           [33m<[39m[33mmain[39m className[33m=[39m[32m"min-h-screen"[39m[33m>[39m{children}[33m<[39m[33m/[39m[33mmain[39m[33m>[39m[0m
+[0m [90m 29 |[39m[0m
+[0m [90m 30 |[39m           {[90m/* ── Groupon-style Footer ── */[39m}[0m
+ ⨯ ./src/app/layout.tsx
+Error: 
+  [31mx[0m Unexpected token `html`. Expected jsx identifier
+    ,-[[36;1;4mD:\claude\files\frontend\src\app\layout.tsx[0m:21:1]
+ [2m21[0m | 
+ [2m22[0m | export default function RootLayout({ children }: { children: React.ReactNode }) {
+ [2m23[0m |   return (
+ [2m24[0m |     <html lang="en" className={inter.variable}>
+    : [31;1m     ^^^^[0m
+ [2m25[0m |       <body className="bg-[#F5F5F5] text-[#1A1A1A] antialiased">
+ [2m26[0m |         <Providers>
+ [2m26[0m |           <ShellWrapper footer={
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/app/layout.tsx
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ✓ Compiled in 1167ms (1136 modules)
+ GET /deals/spa-world-centreville-all-day-relaxation 200 in 2017ms
+ ✓ Compiled in 999ms (535 modules)
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1510021711994-93f8f22ea147?w=800 404
+ ✓ Compiled in 393ms (534 modules)
+ ✓ Compiled in 435ms (1133 modules)
+ GET / 200 in 304ms
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1510021711994-93f8f22ea147?w=800 404
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1510021711994-93f8f22ea147?w=800 404
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1510021711994-93f8f22ea147?w=800 404
+ ○ Compiling /local/things-to-do ...
+ ✓ Compiled /local/things-to-do in 538ms (601 modules)
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1510021711994-93f8f22ea147?w=800 404
+ ✓ Compiled in 1568ms (1133 modules)
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1510021711994-93f8f22ea147?w=800 404
+ ○ Compiling /login ...
+ ✓ Compiled /login in 570ms (616 modules)
+ ✓ Compiled /signup in 312ms (620 modules)
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1510021711994-93f8f22ea147?w=800 404
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1510021711994-93f8f22ea147?w=800 404
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1510021711994-93f8f22ea147?w=800 404
+ ✓ Compiled in 1241ms (1124 modules)
+ ✓ Compiled in 242ms (534 modules)
+ ✓ Compiled in 476ms (1124 modules)
+ GET / 200 in 366ms
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1510021711994-93f8f22ea147?w=800 404
+ ✓ Compiled in 436ms (1124 modules)
+ ✓ Compiled in 969ms (1124 modules)
+ GET /local 200 in 301ms
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1510021711994-93f8f22ea147?w=800 404
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1510021711994-93f8f22ea147?w=800 404
+ ✓ Compiled in 1792ms (1132 modules)
+ ✓ Compiled in 699ms (1134 modules)
+ GET / 200 in 333ms
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1510021711994-93f8f22ea147?w=800 404
+ ○ Compiling /account/groupons ...
+ ✓ Compiled /account/groupons in 568ms (607 modules)
+ ○ Compiling /account/orders ...
+ ✓ Compiled /account/orders in 585ms (1139 modules)
+ ✓ Compiled /gift in 185ms (614 modules)
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1510021711994-93f8f22ea147?w=800 404
+ ○ Compiling /_not-found ...
+ ✓ Compiled /_not-found in 577ms (1144 modules)
+ GET /merchant 404 in 162ms
+ GET /login 200 in 91ms
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1510021711994-93f8f22ea147?w=800 404
+ ✓ Compiled in 1150ms (1125 modules)
+ ✓ Compiled in 489ms (1125 modules)
+ GET /gift 200 in 265ms
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1510021711994-93f8f22ea147?w=800 404
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1510021711994-93f8f22ea147?w=800 404
+ ✓ Compiled in 1362ms (1125 modules)
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1510021711994-93f8f22ea147?w=800 404
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ✓ Compiled in 2.1s (1111 modules)
+ GET /signup?email=claudeparticle%40mailinator.com 200 in 1099ms
+ ✓ Compiled in 635ms (1111 modules)
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1510021711994-93f8f22ea147?w=800 404
+[?25h

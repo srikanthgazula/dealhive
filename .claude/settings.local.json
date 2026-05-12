@@ -1,0 +1,29 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(Get-Process -Name \"GrouponClone.API\" -ErrorAction SilentlyContinue)",
+      "PowerShell(Stop-Process -Force)",
+      "Bash(dotnet ef *)",
+      "Bash(curl -s \"http://localhost:3002/\")",
+      "Bash(python -c \"import sys; data=sys.stdin.read\\(\\); print\\('FEATURED' if 'Featured Deals' in data else 'NO_FEATURED'\\); print\\('TRENDING' if 'Trending' in data else 'NO_TRENDING'\\); print\\('DEALS_COUNT:', data.count\\('discountPercent'\\)\\)\")",
+      "WebFetch(domain:www.groupon.com)",
+      "Bash(npx tsc *)",
+      "Bash(curl -s \"http://localhost:3000/\")",
+      "Bash(python -c ' *)",
+      "Bash(npm run *)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" \"http://localhost:3000/\")",
+      "Bash(curl -s \"http://localhost:3000/\" -w \"\\\\nHTTP_%{http_code}\")",
+      "Bash(powershell -Command \"\\(Get-Content src\\\\components\\\\layout\\\\Navbar.tsx\\) -replace '/auth/login', '/login' -replace '/auth/register', '/signup' -replace '/account/wishlist', '/wishlist' -replace '/account/vouchers', '/account/groupons' -replace '/deals\\\\?search=', '/search?q=' | Set-Content src\\\\components\\\\layout\\\\Navbar.tsx\")",
+      "Bash(powershell -Command ' *)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" \"http://localhost:3000/local/beauty-and-spas\")",
+      "Bash(xargs grep -l \"Register\\\\|register\")",
+      "Bash(xargs grep -l \"unexpected error\\\\|ExceptionMiddleware\\\\|UseExceptionHandler\\\\|IEmailService\")",
+      "Bash(dotnet build *)",
+      "Bash(docker compose *)",
+      "Bash(netstat -ano)",
+      "Bash(taskkill /PID 7804 /F)",
+      "Bash(taskkill /PID 37852 /F)",
+      "PowerShell(Start-Process powershell -ArgumentList '-NoExit', '-Command', 'cd \"D:\\\\claude\\\\files\\\\backend\"; dotnet run --project src/GrouponClone.API' -WindowStyle Normal; Write-Host \"Backend starting...\")"
+    ]
+  }
+}
