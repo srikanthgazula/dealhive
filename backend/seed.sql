@@ -32,7 +32,7 @@ INSERT INTO "Roles" ("Id","Name","NormalizedName","ConcurrencyStamp") VALUES
 
 -- ── Users ────────────────────────────────────────────────────
 -- Role enum: Consumer=0, Vendor=1, Admin=2, SuperAdmin=3
--- PasswordHash = BCrypt of "Password1!" (dev only)
+-- PasswordHash = ASP.NET Identity PBKDF2 hash of "Password1!" (dev only)
 INSERT INTO "Users" (
   "Id","UserName","NormalizedUserName","Email","NormalizedEmail",
   "EmailConfirmed","PasswordHash","SecurityStamp","ConcurrencyStamp",
@@ -41,47 +41,47 @@ INSERT INTO "Users" (
 ) VALUES
   -- Consumer test user
   ('10000000-0000-0000-0000-000000000001','test@dealhive.com','TEST@DEALHIVE.COM','test@dealhive.com','TEST@DEALHIVE.COM',
-   true,'$2a$11$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lh/2','stamp-1','cc-1',
+   true,'AQAAAAEAACcQAAAAELgYJ3qZaQj/sSrgJTvsLBWGAfTlTHQ2heE6o4ZvOM0pNCWClyhew5CKBPxQ3S4SLg==','stamp-1','cc-1',
    false,false,false,0,'Test','User',0,true,NOW()),
   -- Vendor users
   ('10000000-0000-0000-0000-000000000002','vendor_derma@dealhive.com','VENDOR_DERMA@DEALHIVE.COM','vendor_derma@dealhive.com','VENDOR_DERMA@DEALHIVE.COM',
-   true,'$2a$11$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lh/2','stamp-2','cc-2',
+   true,'AQAAAAEAACcQAAAAELgYJ3qZaQj/sSrgJTvsLBWGAfTlTHQ2heE6o4ZvOM0pNCWClyhew5CKBPxQ3S4SLg==','stamp-2','cc-2',
    false,false,false,0,'Derma','Bliss',1,true,NOW()),
   ('10000000-0000-0000-0000-000000000003','vendor_pure@dealhive.com','VENDOR_PURE@DEALHIVE.COM','vendor_pure@dealhive.com','VENDOR_PURE@DEALHIVE.COM',
-   true,'$2a$11$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lh/2','stamp-3','cc-3',
+   true,'AQAAAAEAACcQAAAAELgYJ3qZaQj/sSrgJTvsLBWGAfTlTHQ2heE6o4ZvOM0pNCWClyhew5CKBPxQ3S4SLg==','stamp-3','cc-3',
    false,false,false,0,'Pure','Serenity',1,true,NOW()),
   ('10000000-0000-0000-0000-000000000004','vendor_king@dealhive.com','VENDOR_KING@DEALHIVE.COM','vendor_king@dealhive.com','VENDOR_KING@DEALHIVE.COM',
-   true,'$2a$11$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lh/2','stamp-4','cc-4',
+   true,'AQAAAAEAACcQAAAAELgYJ3qZaQj/sSrgJTvsLBWGAfTlTHQ2heE6o4ZvOM0pNCWClyhew5CKBPxQ3S4SLg==','stamp-4','cc-4',
    false,false,false,0,'King','Spa',1,true,NOW()),
   ('10000000-0000-0000-0000-000000000005','vendor_london@dealhive.com','VENDOR_LONDON@DEALHIVE.COM','vendor_london@dealhive.com','VENDOR_LONDON@DEALHIVE.COM',
-   true,'$2a$11$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lh/2','stamp-5','cc-5',
+   true,'AQAAAAEAACcQAAAAELgYJ3qZaQj/sSrgJTvsLBWGAfTlTHQ2heE6o4ZvOM0pNCWClyhew5CKBPxQ3S4SLg==','stamp-5','cc-5',
    false,false,false,0,'London','House',1,true,NOW()),
   ('10000000-0000-0000-0000-000000000006','vendor_tours@dealhive.com','VENDOR_TOURS@DEALHIVE.COM','vendor_tours@dealhive.com','VENDOR_TOURS@DEALHIVE.COM',
-   true,'$2a$11$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lh/2','stamp-6','cc-6',
+   true,'AQAAAAEAACcQAAAAELgYJ3qZaQj/sSrgJTvsLBWGAfTlTHQ2heE6o4ZvOM0pNCWClyhew5CKBPxQ3S4SLg==','stamp-6','cc-6',
    false,false,false,0,'Chicago','Tours',1,true,NOW()),
   ('10000000-0000-0000-0000-000000000007','vendor_massage@dealhive.com','VENDOR_MASSAGE@DEALHIVE.COM','vendor_massage@dealhive.com','VENDOR_MASSAGE@DEALHIVE.COM',
-   true,'$2a$11$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lh/2','stamp-7','cc-7',
+   true,'AQAAAAEAACcQAAAAELgYJ3qZaQj/sSrgJTvsLBWGAfTlTHQ2heE6o4ZvOM0pNCWClyhew5CKBPxQ3S4SLg==','stamp-7','cc-7',
    false,false,false,0,'Massage','House',1,true,NOW()),
   ('10000000-0000-0000-0000-000000000008','vendor_bared@dealhive.com','VENDOR_BARED@DEALHIVE.COM','vendor_bared@dealhive.com','VENDOR_BARED@DEALHIVE.COM',
-   true,'$2a$11$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lh/2','stamp-8','cc-8',
+   true,'AQAAAAEAACcQAAAAELgYJ3qZaQj/sSrgJTvsLBWGAfTlTHQ2heE6o4ZvOM0pNCWClyhew5CKBPxQ3S4SLg==','stamp-8','cc-8',
    false,false,false,0,'Bared','Monkey',1,true,NOW()),
   ('10000000-0000-0000-0000-000000000009','vendor_infinity@dealhive.com','VENDOR_INFINITY@DEALHIVE.COM','vendor_infinity@dealhive.com','VENDOR_INFINITY@DEALHIVE.COM',
-   true,'$2a$11$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lh/2','stamp-9','cc-9',
+   true,'AQAAAAEAACcQAAAAELgYJ3qZaQj/sSrgJTvsLBWGAfTlTHQ2heE6o4ZvOM0pNCWClyhew5CKBPxQ3S4SLg==','stamp-9','cc-9',
    false,false,false,0,'Infinity','Laser',1,true,NOW()),
   ('10000000-0000-0000-0000-000000000010','vendor_catalina@dealhive.com','VENDOR_CATALINA@DEALHIVE.COM','vendor_catalina@dealhive.com','VENDOR_CATALINA@DEALHIVE.COM',
-   true,'$2a$11$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lh/2','stamp-10','cc-10',
+   true,'AQAAAAEAACcQAAAAELgYJ3qZaQj/sSrgJTvsLBWGAfTlTHQ2heE6o4ZvOM0pNCWClyhew5CKBPxQ3S4SLg==','stamp-10','cc-10',
    false,false,false,0,'Catalina','Flyer',1,true,NOW()),
   ('10000000-0000-0000-0000-000000000011','vendor_valvoline@dealhive.com','VENDOR_VALVOLINE@DEALHIVE.COM','vendor_valvoline@dealhive.com','VENDOR_VALVOLINE@DEALHIVE.COM',
-   true,'$2a$11$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lh/2','stamp-11','cc-11',
+   true,'AQAAAAEAACcQAAAAELgYJ3qZaQj/sSrgJTvsLBWGAfTlTHQ2heE6o4ZvOM0pNCWClyhew5CKBPxQ3S4SLg==','stamp-11','cc-11',
    false,false,false,0,'Valvoline','IOC',1,true,NOW()),
   ('10000000-0000-0000-0000-000000000012','vendor_wolf@dealhive.com','VENDOR_WOLF@DEALHIVE.COM','vendor_wolf@dealhive.com','VENDOR_WOLF@DEALHIVE.COM',
-   true,'$2a$11$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lh/2','stamp-12','cc-12',
+   true,'AQAAAAEAACcQAAAAELgYJ3qZaQj/sSrgJTvsLBWGAfTlTHQ2heE6o4ZvOM0pNCWClyhew5CKBPxQ3S4SLg==','stamp-12','cc-12',
    false,false,false,0,'Great Wolf','Lodge',1,true,NOW()),
   ('10000000-0000-0000-0000-000000000013','vendor_iconic@dealhive.com','VENDOR_ICONIC@DEALHIVE.COM','vendor_iconic@dealhive.com','VENDOR_ICONIC@DEALHIVE.COM',
-   true,'$2a$11$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lh/2','stamp-13','cc-13',
+   true,'AQAAAAEAACcQAAAAELgYJ3qZaQj/sSrgJTvsLBWGAfTlTHQ2heE6o4ZvOM0pNCWClyhew5CKBPxQ3S4SLg==','stamp-13','cc-13',
    false,false,false,0,'Iconic','Tours',1,true,NOW()),
   ('10000000-0000-0000-0000-000000000014','vendor_warwick@dealhive.com','VENDOR_WARWICK@DEALHIVE.COM','vendor_warwick@dealhive.com','VENDOR_WARWICK@DEALHIVE.COM',
-   true,'$2a$11$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lh/2','stamp-14','cc-14',
+   true,'AQAAAAEAACcQAAAAELgYJ3qZaQj/sSrgJTvsLBWGAfTlTHQ2heE6o4ZvOM0pNCWClyhew5CKBPxQ3S4SLg==','stamp-14','cc-14',
    false,false,false,0,'Warwick','Allerton',1,true,NOW());
 
 -- ── UserRoles ─────────────────────────────────────────────────
