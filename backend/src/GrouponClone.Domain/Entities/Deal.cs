@@ -60,7 +60,9 @@ public class Deal : BaseEntity
         DateTime startsAt,
         DateTime? expiresAt = null,
         int? quantityTotal = null,
-        int voucherValidity = 90)
+        int? quantityLimit = null,
+        int voucherValidity = 90,
+        string? finePrint = null)
     {
         if (originalPrice <= 0) throw new DomainException("Original price must be greater than zero.");
         if (discountedPrice <= 0) throw new DomainException("Discounted price must be greater than zero.");
@@ -75,17 +77,46 @@ public class Deal : BaseEntity
             Slug = slug.ToLowerInvariant(),
             ShortDescription = shortDescription.Trim(),
             Description = description,
+            FinePrint = finePrint?.Trim(),
             Type = type,
             OriginalPrice = originalPrice,
             DiscountedPrice = discountedPrice,
             StartsAt = startsAt,
             ExpiresAt = expiresAt,
             QuantityTotal = quantityTotal,
+            QuantityLimit = quantityLimit,
             VoucherValidity = voucherValidity,
         };
 
         deal.AddDomainEvent(new DealCreatedEvent(deal.Id, vendorId));
         return deal;
+    }
+
+    public void Update(
+        string title, string shortDescription, string description,
+        string? finePrint, decimal originalPrice, decimal discountedPrice,
+        DateTime startsAt, DateTime? expiresAt, int? quantityTotal,
+        int? quantityLimit, int voucherValidity, int categoryId)
+    {
+        if (Status != DealStatus.Draft && Status != DealStatus.Rejected)
+            throw new DomainException("Only Draft or Rejected deals can be edited.");
+        if (originalPrice <= 0) throw new DomainException("Original price must be greater than zero.");
+        if (discountedPrice <= 0) throw new DomainException("Discounted price must be greater than zero.");
+        if (discountedPrice >= originalPrice) throw new DomainException("Discounted price must be less than original price.");
+
+        Title = title.Trim();
+        ShortDescription = shortDescription.Trim();
+        Description = description;
+        FinePrint = finePrint?.Trim();
+        OriginalPrice = originalPrice;
+        DiscountedPrice = discountedPrice;
+        StartsAt = startsAt;
+        ExpiresAt = expiresAt;
+        QuantityTotal = quantityTotal;
+        QuantityLimit = quantityLimit;
+        VoucherValidity = voucherValidity;
+        CategoryId = categoryId;
+        SetUpdated();
     }
 
     public void SubmitForApproval()

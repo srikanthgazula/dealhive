@@ -13,6 +13,8 @@ import type { DealDetail } from '@/types';
 
 interface Props { deal: DealDetail; }
 
+const PLACEHOLDER_IMG = 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&q=80';
+
 // ── Helpers ──────────────────────────────────────────────
 function formatBought(n: number): string {
   if (n >= 10_000) return `${(Math.floor(n / 1000) * 1000).toLocaleString()}+`;
@@ -94,9 +96,10 @@ export default function DealDetailClient({ deal }: Props) {
     router.push('/checkout');
   };
 
+  const primaryUrl = deal.primaryImageUrl || PLACEHOLDER_IMG;
   const images = deal.images.length > 0
     ? deal.images
-    : [{ url: deal.primaryImageUrl, altText: deal.title, isPrimary: true }];
+    : [{ url: primaryUrl, altText: deal.title, isPrimary: true }];
 
   const MAX_THUMBS = 6;
   const visibleThumbs = images.slice(0, MAX_THUMBS);
@@ -171,7 +174,7 @@ export default function DealDetailClient({ deal }: Props) {
               {/* Main image */}
               <div className="relative aspect-[4/3] rounded-lg overflow-hidden bg-gray-100 mb-3">
                 <Image
-                  src={images[selectedImage]?.url ?? deal.primaryImageUrl}
+                  src={images[selectedImage]?.url || primaryUrl}
                   alt={images[selectedImage]?.altText ?? deal.title}
                   fill
                   className="object-cover"
@@ -223,7 +226,7 @@ export default function DealDetailClient({ deal }: Props) {
                               : 'border-transparent hover:border-gray-300'
                           )}
                         >
-                          <Image src={img.url} alt={`${deal.title} ${i + 1}`} fill className="object-cover" />
+                          <Image src={img.url || PLACEHOLDER_IMG} alt={`${deal.title} ${i + 1}`} fill className="object-cover" />
                           {isLast && (
                             <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
                               <span className="text-white text-xs font-bold">+{extraCount}</span>

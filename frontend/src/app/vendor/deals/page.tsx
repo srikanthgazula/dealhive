@@ -2,7 +2,7 @@
 
 import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
-import { PlusCircle, Tag, ExternalLink } from 'lucide-react';
+import { PlusCircle, Tag, ExternalLink, Pencil } from 'lucide-react';
 import api from '@/lib/api';
 import { formatCurrency } from '@/lib/utils';
 import { cn } from '@/lib/utils';
@@ -84,13 +84,13 @@ export default function VendorDealsPage() {
       {deals && deals.length > 0 && (
         <div className="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
           {/* Table header */}
-          <div className="hidden md:grid grid-cols-[1fr_120px_100px_80px_80px_48px] gap-4 px-5 py-3 border-b border-gray-100 bg-gray-50 text-xs font-semibold text-gray-500 uppercase tracking-wide">
+          <div className="hidden md:grid grid-cols-[1fr_120px_100px_80px_80px_80px] gap-4 px-5 py-3 border-b border-gray-100 bg-gray-50 text-xs font-semibold text-gray-500 uppercase tracking-wide">
             <span>Deal</span>
             <span>Status</span>
             <span>Price</span>
             <span>Sold</span>
             <span>Rating</span>
-            <span></span>
+            <span>Actions</span>
           </div>
 
           <div className="divide-y divide-gray-100">
@@ -101,13 +101,13 @@ export default function VendorDealsPage() {
               return (
                 <div
                   key={deal.id}
-                  className="grid grid-cols-1 md:grid-cols-[1fr_120px_100px_80px_80px_48px] gap-2 md:gap-4 items-center px-5 py-4 hover:bg-gray-50 transition-colors"
+                  className="grid grid-cols-1 md:grid-cols-[1fr_120px_100px_80px_80px_80px] gap-2 md:gap-4 items-center px-5 py-4 hover:bg-gray-50 transition-colors"
                 >
                   {/* Title */}
                   <div className="min-w-0">
                     <p className="font-medium text-sm text-gray-900 truncate">{deal.title}</p>
                     <p className="text-xs text-gray-400 mt-0.5">
-                      Created {new Date(deal.createdAt).toLocaleDateString()}
+                      Created {new Date(deal.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                     </p>
                   </div>
 
@@ -158,13 +158,20 @@ export default function VendorDealsPage() {
                     )}
                   </div>
 
-                  {/* View link */}
-                  <div className="flex justify-end">
+                  {/* Actions */}
+                  <div className="flex items-center gap-1">
+                    <Link
+                      href={`/vendor/deals/${deal.id}`}
+                      className="p-2 text-gray-400 hover:text-primary transition-colors rounded-lg hover:bg-primary-light"
+                      title="Edit deal"
+                    >
+                      <Pencil className="w-4 h-4" />
+                    </Link>
                     <Link
                       href={`/deals/${deal.slug}`}
                       target="_blank"
                       className="p-2 text-gray-400 hover:text-primary transition-colors rounded-lg hover:bg-primary-light"
-                      title="View deal page"
+                      title="View public page"
                     >
                       <ExternalLink className="w-4 h-4" />
                     </Link>

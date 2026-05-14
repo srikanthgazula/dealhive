@@ -60,7 +60,7 @@ export interface DealSummary {
   originalPrice: number;
   discountedPrice: number;
   discountPercent: number;
-  primaryImageUrl: string;
+  primaryImageUrl: string | null;
   // flat properties matching the API response shape
   vendorName: string;
   vendorCity: string;

@@ -11,7 +11,23 @@ namespace GrouponClone.API.Controllers;
 public class AuthController : ControllerBase
 {
     private readonly IMediator _mediator;
-    public AuthController(IMediator mediator) => _mediator = mediator;
+    private readonly IWebHostEnvironment _env;
+
+    public AuthController(IMediator mediator, IWebHostEnvironment env)
+    {
+        _mediator = mediator;
+        _env = env;
+    }
+
+    private CookieOptions RefreshTokenCookieOptions() => new()
+    {
+        HttpOnly = true,
+        Secure = !_env.IsDevelopment(),          // false on http://localhost, true in prod
+        SameSite = _env.IsDevelopment()
+            ? SameSiteMode.Lax                   // allows cross-port same-host requests in dev
+            : SameSiteMode.Strict,
+        Expires = DateTimeOffset.UtcNow.AddDays(7),
+    };
 
     /// <summary>Register a new user.</summary>
     [HttpPost("register")]
@@ -39,13 +55,7 @@ public class AuthController : ControllerBase
             .GetRequiredService<Application.Interfaces.IJwtTokenService>()
             .GenerateRefreshTokenAsync(result.User.Id, ct);
 
-        Response.Cookies.Append("refreshToken", refreshToken, new CookieOptions
-        {
-            HttpOnly = true,
-            Secure = true,
-            SameSite = SameSiteMode.Strict,
-            Expires = DateTimeOffset.UtcNow.AddDays(7),
-        });
+        Response.Cookies.Append("refreshToken", refreshToken, RefreshTokenCookieOptions());
 
         return Ok(result);
     }
@@ -64,11 +74,7 @@ public class AuthController : ControllerBase
 
         Response.Cookies.Append("refreshToken", await HttpContext.RequestServices
             .GetRequiredService<Application.Interfaces.IJwtTokenService>()
-            .GenerateRefreshTokenAsync(Guid.Empty, ct), new CookieOptions
-            {
-                HttpOnly = true, Secure = true, SameSite = SameSiteMode.Strict,
-                Expires = DateTimeOffset.UtcNow.AddDays(7),
-            });
+            .GenerateRefreshTokenAsync(Guid.Empty, ct), RefreshTokenCookieOptions());
 
         return Ok(result);
     }

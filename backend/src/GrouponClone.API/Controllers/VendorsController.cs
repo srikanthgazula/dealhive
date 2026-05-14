@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using GrouponClone.Application.Features.Vendors;
+using GrouponClone.Application.Features.Deals.Commands;
 
 namespace GrouponClone.API.Controllers;
 
@@ -38,7 +39,7 @@ public class VendorsController : ControllerBase
     public async Task<IActionResult> GetDeals(CancellationToken ct)
         => Ok(await _mediator.Send(new GetVendorDealsQuery(), ct));
 
-    /// <summary>Create a deal (alias — handled by DealsController).</summary>
+    /// <summary>Create a deal.</summary>
     [HttpPost("me/deals")]
     [Authorize(Roles = "Vendor")]
     public async Task<IActionResult> CreateDeal(
@@ -47,4 +48,39 @@ public class VendorsController : ControllerBase
         var result = await _mediator.Send(command, ct);
         return CreatedAtAction(nameof(GetDeals), result);
     }
+
+    /// <summary>Get a single vendor deal by ID for editing.</summary>
+    [HttpGet("me/deals/{id:guid}")]
+    [Authorize(Roles = "Vendor")]
+    [ProducesResponseType(typeof(VendorDealDetailDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetDeal(Guid id, CancellationToken ct)
+    {
+        var result = await _mediator.Send(new GetVendorDealByIdQuery(id), ct);
+        return result is null ? NotFound() : Ok(result);
+    }
+
+    /// <summary>Update a vendor deal (Draft or Rejected status only).</summary>
+    [HttpPut("me/deals/{id:guid}")]
+    [Authorize(Roles = "Vendor")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> UpdateDeal(Guid id, [FromBody] UpdateDealRequest body, CancellationToken ct)
+    {
+        await _mediator.Send(new UpdateDealCommand(
+            id, body.CategoryId, body.Title, body.ShortDescription, body.Description,
+            body.FinePrint, body.OriginalPrice, body.DiscountedPrice,
+            body.StartsAt, body.ExpiresAt, body.QuantityTotal, body.QuantityLimit,
+            body.VoucherValidity, body.Options), ct);
+        return NoContent();
+    }
 }
+
+public record UpdateDealRequest(
+    int CategoryId, string Title, string ShortDescription, string Description, string? FinePrint,
+    decimal OriginalPrice, decimal DiscountedPrice,
+    DateTime StartsAt, DateTime? ExpiresAt,
+    int? QuantityTotal, int? QuantityLimit, int VoucherValidity,
+    List<UpdateDealOptionDto> Options
+);

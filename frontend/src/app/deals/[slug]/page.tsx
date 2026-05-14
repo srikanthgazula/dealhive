@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     openGraph: {
       title: deal.title,
       description: deal.shortDescription,
-      images: [deal.primaryImageUrl],
+      images: deal.primaryImageUrl ? [deal.primaryImageUrl] : [],
       type: 'website',
     },
     other: {
@@ -44,7 +44,7 @@ export default async function DealDetailPage({ params }: { params: { slug: strin
     '@type': 'Product',
     name: deal.title,
     description: deal.shortDescription,
-    image: deal.primaryImageUrl,
+    image: deal.primaryImageUrl || undefined,
     offers: {
       '@type': 'Offer',
       price: deal.discountedPrice,

@@ -6,6 +6,7 @@
 using FluentValidation;
 using MediatR;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using GrouponClone.Application.Interfaces;
 using GrouponClone.Domain.Entities;
 using GrouponClone.Domain.Enums;
@@ -83,31 +84,36 @@ public class CreateDealCommandHandler : IRequestHandler<CreateDealCommand, Creat
     private readonly IDealRepository _dealRepository;
     private readonly IUnitOfWork _unitOfWork;
     private readonly ICurrentUserService _currentUser;
-    private readonly IMapper _mapper;
+    private readonly IApplicationDbContext _db;
 
     public CreateDealCommandHandler(
         IDealRepository dealRepository,
         IUnitOfWork unitOfWork,
         ICurrentUserService currentUser,
-        IMapper mapper)
+        IApplicationDbContext db)
     {
         _dealRepository = dealRepository;
         _unitOfWork = unitOfWork;
         _currentUser = currentUser;
-        _mapper = mapper;
+        _db = db;
     }
 
     public async Task<CreateDealResponse> Handle(CreateDealCommand request, CancellationToken cancellationToken)
     {
-        var vendorId = _currentUser.UserId
-            ?? throw new UnauthorizedException("Vendor ID not found in token.");
+        var userId = _currentUser.UserId
+            ?? throw new UnauthorizedException("User not authenticated.");
+
+        // Resolve Vendor.Id from the authenticated user's ID
+        var vendor = await _db.Vendors.AsNoTracking()
+            .FirstOrDefaultAsync(v => v.UserId == userId, cancellationToken)
+            ?? throw new NotFoundException("Vendor", userId);
 
         var slug = GenerateSlug(request.Title);
         var slugExists = await _dealRepository.SlugExistsAsync(slug, cancellationToken);
-        if (slugExists) slug = $"{slug}-{Guid.NewGuid():N[..6]}";
+        if (slugExists) slug = $"{slug}-{Guid.NewGuid().ToString("N")[..6]}";
 
         var deal = Deal.Create(
-            vendorId: vendorId,
+            vendorId: vendor.Id,
             categoryId: request.CategoryId,
             title: request.Title,
             slug: slug,
@@ -119,11 +125,23 @@ public class CreateDealCommandHandler : IRequestHandler<CreateDealCommand, Creat
             startsAt: request.StartsAt,
             expiresAt: request.ExpiresAt,
             quantityTotal: request.QuantityTotal,
-            voucherValidity: request.VoucherValidity
+            quantityLimit: request.QuantityLimit,
+            voucherValidity: request.VoucherValidity,
+            finePrint: request.FinePrint
         );
 
         await _dealRepository.AddAsync(deal, cancellationToken);
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
+        await _unitOfWork.SaveChangesAsync(cancellationToken); // save deal first to get deal.Id
+
+        // Persist deal options
+        if (request.Options.Count > 0)
+        {
+            var options = request.Options.Select((o, i) =>
+                DealOption.Create(deal.Id, o.Title, o.Price, o.Description, o.Quantity, sortOrder: i));
+
+            await _db.DealOptions.AddRangeAsync(options, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+        }
 
         return new CreateDealResponse(deal.Id, deal.Slug, deal.Status.ToString());
     }
