@@ -11,7 +11,7 @@ interface DealsState {
   currentPage: number;
   totalPages: number;
   currentDeal: DealDetail | null;
-  wishlistedIds: Set<string>;
+  wishlistedIds: Record<string, boolean>;
   isLoading: boolean;
   isDetailLoading: boolean;
   error: string | null;
@@ -27,7 +27,7 @@ const initialState: DealsState = {
   currentPage: 1,
   totalPages: 0,
   currentDeal: null,
-  wishlistedIds: new Set(),
+  wishlistedIds: {},
   isLoading: false,
   isDetailLoading: false,
   error: null,
@@ -137,10 +137,10 @@ const dealsSlice = createSlice({
     },
     optimisticToggleWishlist(state, action: PayloadAction<string>) {
       const id = action.payload;
-      if (state.wishlistedIds.has(id)) {
-        state.wishlistedIds.delete(id);
+      if (state.wishlistedIds[id]) {
+        delete state.wishlistedIds[id];
       } else {
-        state.wishlistedIds.add(id);
+        state.wishlistedIds[id] = true;
       }
     },
   },
@@ -173,13 +173,15 @@ const dealsSlice = createSlice({
       .addCase(toggleWishlist.fulfilled, (state, action) => {
         const { dealId, wishlisted } = action.payload;
         if (wishlisted) {
-          state.wishlistedIds.add(dealId);
+          state.wishlistedIds[dealId] = true;
         } else {
-          state.wishlistedIds.delete(dealId);
+          delete state.wishlistedIds[dealId];
         }
       })
       .addCase(fetchWishlist.fulfilled, (state, action) => {
-        state.wishlistedIds = new Set(action.payload);
+        state.wishlistedIds = action.payload.reduce<Record<string, boolean>>(
+          (acc, id) => { acc[id] = true; return acc; }, {}
+        );
       });
   },
 });
@@ -198,7 +200,7 @@ export const selectDealsLoading = (state: { deals: DealsState }) => state.deals.
 export const selectDealDetailLoading = (state: { deals: DealsState }) => state.deals.isDetailLoading;
 export const selectWishlistedIds = (state: { deals: DealsState }) => state.deals.wishlistedIds;
 export const selectIsWishlisted = (dealId: string) =>
-  (state: { deals: DealsState }) => state.deals.wishlistedIds.has(dealId);
+  (state: { deals: DealsState }) => !!state.deals.wishlistedIds[dealId];
 export const selectPagination = createSelector(
   (state: { deals: DealsState }) => state.deals,
   (d) => ({ totalCount: d.totalCount, currentPage: d.currentPage, totalPages: d.totalPages })

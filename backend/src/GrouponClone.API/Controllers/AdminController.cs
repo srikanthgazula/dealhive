@@ -44,6 +44,33 @@ public class AdminController : ControllerBase
         return NoContent();
     }
 
+    /// <summary>Submit a draft deal for approval (admin-initiated).</summary>
+    [HttpPut("deals/{id:guid}/submit")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<IActionResult> SubmitDeal(Guid id, CancellationToken ct)
+    {
+        await _mediator.Send(new GrouponClone.Application.Features.Deals.Commands.SubmitDealForApprovalCommand(id), ct);
+        return NoContent();
+    }
+
+    /// <summary>Pause an active deal.</summary>
+    [HttpPut("deals/{id:guid}/pause")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<IActionResult> PauseDeal(Guid id, CancellationToken ct)
+    {
+        await _mediator.Send(new AdminPauseDealCommand(id), ct);
+        return NoContent();
+    }
+
+    /// <summary>Resume a paused deal.</summary>
+    [HttpPut("deals/{id:guid}/resume")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<IActionResult> ResumeDeal(Guid id, CancellationToken ct)
+    {
+        await _mediator.Send(new AdminResumeDealCommand(id), ct);
+        return NoContent();
+    }
+
     /// <summary>Approve a vendor.</summary>
     [HttpPut("vendors/{id:guid}/approve")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -61,6 +88,12 @@ public class AdminController : ControllerBase
         await _mediator.Send(new AdminSuspendVendorCommand(id, request.Reason), ct);
         return NoContent();
     }
+
+    /// <summary>Get all orders with optional status filter.</summary>
+    [HttpGet("orders")]
+    [ProducesResponseType(typeof(GrouponClone.Application.Features.Orders.PaginatedOrdersResponse), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetOrders([FromQuery] string? status, [FromQuery] int page = 1, [FromQuery] int pageSize = 20, CancellationToken ct = default)
+        => Ok(await _mediator.Send(new GrouponClone.Application.Features.Orders.GetAdminOrdersQuery(status, page, pageSize), ct));
 
     /// <summary>Get vendors with optional status filter.</summary>
     [HttpGet("vendors")]

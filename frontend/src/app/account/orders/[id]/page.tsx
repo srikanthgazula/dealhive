@@ -1,12 +1,13 @@
 'use client';
 
-import { use } from 'react';
 import Link from 'next/link';
 import { useQuery } from '@tanstack/react-query';
 import { ArrowLeft, Package } from 'lucide-react';
 import api from '@/lib/api';
 import { formatCurrency, formatDate, cn } from '@/lib/utils';
 import type { Order } from '@/types';
+import { useAppSelector } from '@/store';
+import { selectIsSessionRestoring } from '@/store/slices/authSlice';
 
 const STATUS_COLORS: Record<string, string> = {
   Pending: 'bg-yellow-100 text-yellow-800',
@@ -16,12 +17,14 @@ const STATUS_COLORS: Record<string, string> = {
   Refunded: 'bg-purple-100 text-purple-800',
 };
 
-export default function OrderDetailPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = use(params);
+export default function OrderDetailPage({ params }: { params: { id: string } }) {
+  const { id } = params;
+  const isSessionRestoring = useAppSelector(selectIsSessionRestoring);
 
   const { data: order, isLoading } = useQuery<Order>({
     queryKey: ['orders', id],
     queryFn: () => api.get<Order>(`/orders/${id}`).then((r) => r.data),
+    enabled: !!id && !isSessionRestoring,
   });
 
   if (isLoading) {

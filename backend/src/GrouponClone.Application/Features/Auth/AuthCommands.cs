@@ -117,7 +117,7 @@ public class LogoutCommandHandler : IRequestHandler<LogoutCommand>
 // ─── Refresh Token ────────────────────────────────────────────
 
 public record RefreshTokenCommand(string Token) : IRequest<RefreshTokenResponse>;
-public record RefreshTokenResponse(string AccessToken, int ExpiresIn);
+public record RefreshTokenResponse(string AccessToken, int ExpiresIn, string NewRefreshToken);
 
 public class RefreshTokenCommandHandler : IRequestHandler<RefreshTokenCommand, RefreshTokenResponse>
 {
@@ -141,7 +141,7 @@ public class RefreshTokenCommandHandler : IRequestHandler<RefreshTokenCommand, R
             ?? throw new NotFoundException("User", userId);
 
         var accessToken = _jwt.GenerateAccessToken(user);
-        return new RefreshTokenResponse(accessToken, 900);
+        return new RefreshTokenResponse(accessToken, 900, newRefreshToken);
     }
 }
 
@@ -164,9 +164,6 @@ public class ForgotPasswordCommandHandler : IRequestHandler<ForgotPasswordComman
         var token = await _identity.GeneratePasswordResetTokenAsync(req.Email);
         if (token is null) return; // Don't reveal whether email exists
 
-        var user = await _identity.GetByIdAsync(
-            (await _identity.GetByIdAsync(Guid.Empty))?.Id ?? Guid.Empty);
-        // Fetch user to get first name — fire and forget silently if not found
         await _email.SendPasswordResetAsync(req.Email, "there", token, ct);
     }
 }

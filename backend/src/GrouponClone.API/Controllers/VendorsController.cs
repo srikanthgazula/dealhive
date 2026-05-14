@@ -60,6 +60,25 @@ public class VendorsController : ControllerBase
         return result is null ? NotFound() : Ok(result);
     }
 
+    /// <summary>Get orders containing this vendor's items.</summary>
+    [HttpGet("me/orders")]
+    [Authorize(Roles = "Vendor")]
+    [ProducesResponseType(typeof(Application.Features.Orders.PaginatedOrdersResponse), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetOrders([FromQuery] int page = 1, [FromQuery] int pageSize = 20, CancellationToken ct = default)
+        => Ok(await _mediator.Send(new Application.Features.Orders.GetVendorOrdersQuery(page, pageSize), ct));
+
+    /// <summary>Submit a draft deal for admin approval.</summary>
+    [HttpPost("me/deals/{id:guid}/submit")]
+    [Authorize(Roles = "Vendor")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> SubmitDeal(Guid id, CancellationToken ct)
+    {
+        await _mediator.Send(new SubmitDealForApprovalCommand(id), ct);
+        return NoContent();
+    }
+
     /// <summary>Update a vendor deal (Draft or Rejected status only).</summary>
     [HttpPut("me/deals/{id:guid}")]
     [Authorize(Roles = "Vendor")]

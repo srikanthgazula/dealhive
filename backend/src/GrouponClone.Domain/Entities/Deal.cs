@@ -158,6 +158,15 @@ public class Deal : BaseEntity
         SetUpdated();
     }
 
+    public void Resume()
+    {
+        if (Status != DealStatus.Paused)
+            throw new DomainException("Only paused deals can be resumed.");
+
+        Status = DealStatus.Active;
+        SetUpdated();
+    }
+
     public void IncrementSold(int quantity = 1)
     {
         if (QuantityTotal.HasValue && QuantitySold + quantity > QuantityTotal.Value)

@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using GrouponClone.Application.Features.Users;
+using GrouponClone.Application.Features.Deals.Queries;
 
 namespace GrouponClone.API.Controllers;
 
@@ -39,9 +40,9 @@ public class UsersController : ControllerBase
         return NoContent();
     }
 
-    /// <summary>Get wishlist deal IDs.</summary>
+    /// <summary>Get wishlist deals.</summary>
     [HttpGet("me/wishlist")]
-    [ProducesResponseType(typeof(IEnumerable<Guid>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(IEnumerable<DealSummaryResponse>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetWishlist(CancellationToken ct)
         => Ok(await _mediator.Send(new GetWishlistQuery(), ct));
 

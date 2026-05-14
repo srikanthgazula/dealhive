@@ -160,6 +160,7 @@ export default function Navbar() {
   const navTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const cartRef = useRef<HTMLDivElement>(null);
   const loginRef = useRef<HTMLDivElement>(null);
+  const userMenuRef = useRef<HTMLDivElement>(null);
 
   // Close cart on outside click
   useEffect(() => {
@@ -182,6 +183,17 @@ export default function Navbar() {
     if (loginOpen) document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [loginOpen]);
+
+  // Close user menu on outside click
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (userMenuRef.current && !userMenuRef.current.contains(e.target as Node)) {
+        setUserMenuOpen(false);
+      }
+    };
+    if (userMenuOpen) document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [userMenuOpen]);
 
   const openLogin = () => {
     setLoginOpen(true);
@@ -416,14 +428,14 @@ export default function Navbar() {
             </div>
 
             {/* Wishlist */}
-            <Link href="/wishlist" className="flex flex-col items-center p-2 hover:text-[#53A318] transition-colors">
+            <Link href="/account/wishlist" className="flex flex-col items-center p-2 hover:text-[#53A318] transition-colors">
               <Heart className="w-5 h-5 text-gray-600" />
               <span className="hidden md:block text-[10px] text-gray-500 mt-0.5">Wishlist</span>
             </Link>
 
             {/* Sign in / account */}
             {isAuthenticated ? (
-              <div className="relative">
+              <div className="relative" ref={userMenuRef}>
                 <button
                   onClick={() => setUserMenuOpen((o) => !o)}
                   className="flex flex-col items-center p-2 hover:text-[#53A318] transition-colors"
@@ -439,13 +451,17 @@ export default function Navbar() {
                       <p className="font-bold text-sm">{user?.firstName} {user?.lastName}</p>
                       <p className="text-xs text-gray-500 mt-0.5">{user?.email}</p>
                     </div>
-                    <Link href="/account/orders" className="flex items-center gap-2 px-4 py-2.5 text-sm hover:bg-[#F5F5F5]" onClick={() => setUserMenuOpen(false)}>
-                      <Package className="w-4 h-4 text-gray-500" /> My Orders
-                    </Link>
-                    <Link href="/account/groupons" className="flex items-center gap-2 px-4 py-2.5 text-sm hover:bg-[#F5F5F5]" onClick={() => setUserMenuOpen(false)}>
-                      <Package className="w-4 h-4 text-gray-500" /> My Vouchers
-                    </Link>
-                    <Link href="/wishlist" className="flex items-center gap-2 px-4 py-2.5 text-sm hover:bg-[#F5F5F5]" onClick={() => setUserMenuOpen(false)}>
+                    {(!user?.role || user.role === 'Consumer') && (
+                      <>
+                        <Link href="/account/orders" className="flex items-center gap-2 px-4 py-2.5 text-sm hover:bg-[#F5F5F5]" onClick={() => setUserMenuOpen(false)}>
+                          <Package className="w-4 h-4 text-gray-500" /> My Orders
+                        </Link>
+                        <Link href="/account/groupons" className="flex items-center gap-2 px-4 py-2.5 text-sm hover:bg-[#F5F5F5]" onClick={() => setUserMenuOpen(false)}>
+                          <Package className="w-4 h-4 text-gray-500" /> My Vouchers
+                        </Link>
+                      </>
+                    )}
+                    <Link href="/account/wishlist" className="flex items-center gap-2 px-4 py-2.5 text-sm hover:bg-[#F5F5F5]" onClick={() => setUserMenuOpen(false)}>
                       <Heart className="w-4 h-4 text-gray-500" /> Wishlist
                     </Link>
                     {user?.role === 'Vendor' && (
@@ -561,9 +577,11 @@ export default function Navbar() {
                       {/* ── Quick links ── */}
                       <div className="mt-4 border-t border-[#F0F0F0] pt-1">
                         {[
-                          { href: '/account/groupons', icon: <Tag className="w-4 h-4" />, label: 'My Groupons' },
-                          { href: '/account/orders',   icon: <Eye className="w-4 h-4" />, label: 'Recently Viewed' },
-                          { href: '/gift',             icon: <Gift className="w-4 h-4" />, label: 'Redeem Gift Card' },
+                          ...(!user || user.role === 'Consumer' ? [
+                            { href: '/account/groupons', icon: <Tag className="w-4 h-4" />, label: 'My Groupons' },
+                            { href: '/account/orders',   icon: <Eye className="w-4 h-4" />, label: 'My Orders' },
+                          ] : []),
+                          { href: '/gift', icon: <Gift className="w-4 h-4" />, label: 'Redeem Gift Card' },
                         ].map(({ href, icon, label }) => (
                           <Link key={href} href={href} onClick={() => setLoginOpen(false)}
                             className="flex items-center justify-between py-2.5 border-b border-[#F5F5F5] last:border-0 hover:bg-gray-50 -mx-5 px-5 transition-colors">

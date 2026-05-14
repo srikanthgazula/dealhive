@@ -49,7 +49,7 @@ const nextConfig = {
       { source: '/auth/forgot-password', destination: '/login', permanent: false },
       // Old account routes → new routes
       { source: '/account/vouchers', destination: '/account/groupons', permanent: true },
-      { source: '/account/wishlist', destination: '/wishlist', permanent: true },
+      { source: '/wishlist', destination: '/account/wishlist', permanent: true },
       // Old deals category routes → Groupon-style routes
       { source: '/deals/local', destination: '/local', permanent: true },
       { source: '/deals/health-beauty', destination: '/local/beauty-and-spas', permanent: true },

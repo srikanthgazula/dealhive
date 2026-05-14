@@ -72,11 +72,9 @@ public class AuthController : ControllerBase
 
         var result = await _mediator.Send(new RefreshTokenCommand(token), ct);
 
-        Response.Cookies.Append("refreshToken", await HttpContext.RequestServices
-            .GetRequiredService<Application.Interfaces.IJwtTokenService>()
-            .GenerateRefreshTokenAsync(Guid.Empty, ct), RefreshTokenCookieOptions());
+        Response.Cookies.Append("refreshToken", result.NewRefreshToken, RefreshTokenCookieOptions());
 
-        return Ok(result);
+        return Ok(new { result.AccessToken, result.ExpiresIn });
     }
 
     /// <summary>Logout and revoke refresh token.</summary>

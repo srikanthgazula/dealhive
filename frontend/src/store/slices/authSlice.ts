@@ -73,7 +73,7 @@ export const register = createAsyncThunk<AuthResponse, RegisterRequest>(
 );
 
 export const logoutUser = createAsyncThunk('auth/logout', async () => {
-  await api.delete('/auth/logout');
+  await api.post('/auth/logout');
 });
 
 export const fetchCurrentUser = createAsyncThunk<User>(

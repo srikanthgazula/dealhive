@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
-import { PlusCircle, Trash2, Tag, Info, ArrowLeft, Pencil } from 'lucide-react';
+import { PlusCircle, Trash2, Tag, Info, ArrowLeft, Pencil, SendHorizonal } from 'lucide-react';
 import api from '@/lib/api';
 import type { Category } from '@/types';
 import { useAppSelector } from '@/store';
@@ -117,6 +117,7 @@ export default function EditDealPage() {
   const [originalStatus, setOriginalStatus] = useState('');
   const [originalType, setOriginalType] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmittingForApproval, setIsSubmittingForApproval] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
@@ -209,6 +210,18 @@ export default function EditDealPage() {
       if (!prev) return prev;
       return { ...prev, options: prev.options.length > 1 ? prev.options.filter((_, idx) => idx !== i) : prev.options };
     });
+
+  const handleSubmitForApproval = async () => {
+    setError(null);
+    setIsSubmittingForApproval(true);
+    try {
+      await api.post(`/vendors/me/deals/${id}/submit`);
+      router.push('/vendor/deals');
+    } catch (err: any) {
+      setError(err.response?.data?.detail ?? err.response?.data?.title ?? 'Failed to submit deal for approval.');
+      setIsSubmittingForApproval(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -463,10 +476,21 @@ export default function EditDealPage() {
           {canEdit && (
             <button
               type="submit"
-              disabled={isSubmitting}
+              disabled={isSubmitting || isSubmittingForApproval}
               className="flex-1 bg-primary text-white font-semibold py-3 rounded-xl hover:bg-primary-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isSubmitting ? 'Saving…' : 'Save Changes'}
+            </button>
+          )}
+          {originalStatus === 'Draft' && (
+            <button
+              type="button"
+              onClick={handleSubmitForApproval}
+              disabled={isSubmitting || isSubmittingForApproval}
+              className="flex-1 bg-blue-600 text-white font-semibold py-3 rounded-xl hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            >
+              <SendHorizonal className="w-4 h-4" />
+              {isSubmittingForApproval ? 'Submitting…' : 'Submit for Approval'}
             </button>
           )}
         </div>

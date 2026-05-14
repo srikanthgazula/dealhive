@@ -47,18 +47,26 @@ public class SubmitDealForApprovalCommandHandler : IRequestHandler<SubmitDealFor
     private readonly IDealRepository _deals;
     private readonly IUnitOfWork _uow;
     private readonly ICurrentUserService _currentUser;
+    private readonly IApplicationDbContext _db;
 
-    public SubmitDealForApprovalCommandHandler(IDealRepository deals, IUnitOfWork uow, ICurrentUserService cu)
+    public SubmitDealForApprovalCommandHandler(IDealRepository deals, IUnitOfWork uow, ICurrentUserService cu, IApplicationDbContext db)
     {
-        _deals = deals; _uow = uow; _currentUser = cu;
+        _deals = deals; _uow = uow; _currentUser = cu; _db = db;
     }
 
     public async Task Handle(SubmitDealForApprovalCommand req, CancellationToken ct)
     {
+        var userId = _currentUser.UserId ?? throw new UnauthorizedException();
+
+        // deal.VendorId is Vendor.Id, not User.Id — resolve vendor first
+        var vendor = await _db.Vendors.AsNoTracking()
+            .FirstOrDefaultAsync(v => v.UserId == userId, ct)
+            ?? throw new NotFoundException("Vendor", userId);
+
         var deal = await _deals.GetByIdAsync(req.DealId, ct)
             ?? throw new NotFoundException(nameof(Domain.Entities.Deal), req.DealId);
 
-        if (deal.VendorId != _currentUser.UserId)
+        if (deal.VendorId != vendor.Id)
             throw new ForbiddenException();
 
         deal.SubmitForApproval();
