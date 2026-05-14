@@ -24,6 +24,8 @@ public record PaginatedOrdersResponse(IEnumerable<OrderDto> Items, int TotalCoun
 
 public record GetOrdersQuery(int Page = 1, int PageSize = 10) : IRequest<PaginatedOrdersResponse>;
 public record GetOrderByIdQuery(Guid OrderId) : IRequest<OrderDto>;
+public record GetVendorOrdersQuery(int Page = 1, int PageSize = 20) : IRequest<PaginatedOrdersResponse>;
+public record GetAdminOrdersQuery(string? Status = null, int Page = 1, int PageSize = 20) : IRequest<PaginatedOrdersResponse>;
 
 // ─── Handlers ────────────────────────────────────────────────
 
@@ -81,6 +83,66 @@ public class GetOrderByIdQueryHandler : IRequestHandler<GetOrderByIdQuery, Order
             throw new ForbiddenException();
 
         return OrderMapper.MapOrder(order);
+    }
+}
+
+public class GetVendorOrdersQueryHandler : IRequestHandler<GetVendorOrdersQuery, PaginatedOrdersResponse>
+{
+    private readonly ICurrentUserService _currentUser;
+    private readonly IApplicationDbContext _db;
+
+    public GetVendorOrdersQueryHandler(ICurrentUserService cu, IApplicationDbContext db)
+    {
+        _currentUser = cu; _db = db;
+    }
+
+    public async Task<PaginatedOrdersResponse> Handle(GetVendorOrdersQuery req, CancellationToken ct)
+    {
+        var userId = _currentUser.UserId ?? throw new UnauthorizedException();
+
+        var vendor = await _db.Vendors.AsNoTracking()
+            .FirstOrDefaultAsync(v => v.UserId == userId, ct)
+            ?? throw new NotFoundException("Vendor", userId);
+
+        var query = _db.Orders.AsNoTracking()
+            .Include(o => o.Items)
+            .Include(o => o.Vouchers)
+            .Include(o => o.Payment)
+            .Where(o => o.Items.Any(i => i.VendorId == vendor.Id))
+            .OrderByDescending(o => o.CreatedAt);
+
+        var total = await query.CountAsync(ct);
+        var orders = await query.Skip((req.Page - 1) * req.PageSize).Take(req.PageSize).ToListAsync(ct);
+        var pages = (int)Math.Ceiling(total / (double)req.PageSize);
+
+        return new PaginatedOrdersResponse(orders.Select(OrderMapper.MapOrder), total, req.Page, req.PageSize, pages);
+    }
+}
+
+public class GetAdminOrdersQueryHandler : IRequestHandler<GetAdminOrdersQuery, PaginatedOrdersResponse>
+{
+    private readonly IApplicationDbContext _db;
+
+    public GetAdminOrdersQueryHandler(IApplicationDbContext db) => _db = db;
+
+    public async Task<PaginatedOrdersResponse> Handle(GetAdminOrdersQuery req, CancellationToken ct)
+    {
+        var query = _db.Orders.AsNoTracking()
+            .Include(o => o.Items)
+            .Include(o => o.Vouchers)
+            .Include(o => o.Payment)
+            .AsQueryable();
+
+        if (!string.IsNullOrEmpty(req.Status) && Enum.TryParse<Domain.Enums.OrderStatus>(req.Status, out var status))
+            query = query.Where(o => o.Status == status);
+
+        query = query.OrderByDescending(o => o.CreatedAt);
+
+        var total = await query.CountAsync(ct);
+        var orders = await query.Skip((req.Page - 1) * req.PageSize).Take(req.PageSize).ToListAsync(ct);
+        var pages = (int)Math.Ceiling(total / (double)req.PageSize);
+
+        return new PaginatedOrdersResponse(orders.Select(OrderMapper.MapOrder), total, req.Page, req.PageSize, pages);
     }
 }
 

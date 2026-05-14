@@ -115,8 +115,40 @@ public class AdminRejectDealCommandHandler : IRequestHandler<AdminRejectDealComm
 
 // ─── Approve / Suspend Vendor ────────────────────────────────
 
+public record AdminPauseDealCommand(Guid DealId) : IRequest;
+public record AdminResumeDealCommand(Guid DealId) : IRequest;
 public record AdminApproveVendorCommand(Guid VendorId) : IRequest;
 public record AdminSuspendVendorCommand(Guid VendorId, string Reason) : IRequest;
+
+public class AdminPauseDealCommandHandler : IRequestHandler<AdminPauseDealCommand>
+{
+    private readonly IDealRepository _deals;
+    private readonly IUnitOfWork _uow;
+    public AdminPauseDealCommandHandler(IDealRepository deals, IUnitOfWork uow) { _deals = deals; _uow = uow; }
+
+    public async Task Handle(AdminPauseDealCommand req, CancellationToken ct)
+    {
+        var deal = await _deals.GetByIdAsync(req.DealId, ct)
+            ?? throw new NotFoundException(nameof(Domain.Entities.Deal), req.DealId);
+        deal.Pause();
+        await _uow.SaveChangesAsync(ct);
+    }
+}
+
+public class AdminResumeDealCommandHandler : IRequestHandler<AdminResumeDealCommand>
+{
+    private readonly IDealRepository _deals;
+    private readonly IUnitOfWork _uow;
+    public AdminResumeDealCommandHandler(IDealRepository deals, IUnitOfWork uow) { _deals = deals; _uow = uow; }
+
+    public async Task Handle(AdminResumeDealCommand req, CancellationToken ct)
+    {
+        var deal = await _deals.GetByIdAsync(req.DealId, ct)
+            ?? throw new NotFoundException(nameof(Domain.Entities.Deal), req.DealId);
+        deal.Resume();
+        await _uow.SaveChangesAsync(ct);
+    }
+}
 
 public class AdminApproveVendorCommandHandler : IRequestHandler<AdminApproveVendorCommand>
 {
@@ -166,7 +198,9 @@ public class GetAdminDealsQueryHandler : IRequestHandler<GetAdminDealsQuery, Pag
 
     public async Task<PaginatedAdminDealsResponse> Handle(GetAdminDealsQuery req, CancellationToken ct)
     {
-        var query = _db.Deals.AsNoTracking().Include(d => d.Vendor).AsQueryable();
+        var query = _db.Deals.AsNoTracking().Include(d => d.Vendor)
+            .Where(d => d.Status != Domain.Enums.DealStatus.Draft) // Draft deals are vendor-only
+            .AsQueryable();
 
         if (!string.IsNullOrEmpty(req.Status) && Enum.TryParse<Domain.Enums.DealStatus>(req.Status, out var status))
             query = query.Where(d => d.Status == status);

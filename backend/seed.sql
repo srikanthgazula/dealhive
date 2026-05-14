@@ -82,7 +82,11 @@ INSERT INTO "Users" (
    false,false,false,0,'Iconic','Tours',1,true,NOW()),
   ('10000000-0000-0000-0000-000000000014','vendor_warwick@dealhive.com','VENDOR_WARWICK@DEALHIVE.COM','vendor_warwick@dealhive.com','VENDOR_WARWICK@DEALHIVE.COM',
    true,'AQAAAAEAACcQAAAAELgYJ3qZaQj/sSrgJTvsLBWGAfTlTHQ2heE6o4ZvOM0pNCWClyhew5CKBPxQ3S4SLg==','stamp-14','cc-14',
-   false,false,false,0,'Warwick','Allerton',1,true,NOW());
+   false,false,false,0,'Warwick','Allerton',1,true,NOW()),
+  -- Admin user
+  ('10000000-0000-0000-0000-000000000024','admin@dealhive.com','ADMIN@DEALHIVE.COM','admin@dealhive.com','ADMIN@DEALHIVE.COM',
+   true,'AQAAAAEAACcQAAAAELgYJ3qZaQj/sSrgJTvsLBWGAfTlTHQ2heE6o4ZvOM0pNCWClyhew5CKBPxQ3S4SLg==','stamp-admin-1','cc-admin-1',
+   false,false,false,0,'Admin','User',2,true,NOW());
 
 -- ── UserRoles ─────────────────────────────────────────────────
 INSERT INTO "UserRoles" ("UserId","RoleId") VALUES
@@ -99,7 +103,8 @@ INSERT INTO "UserRoles" ("UserId","RoleId") VALUES
   ('10000000-0000-0000-0000-000000000011','00000000-0000-0000-0000-000000000102'),
   ('10000000-0000-0000-0000-000000000012','00000000-0000-0000-0000-000000000102'),
   ('10000000-0000-0000-0000-000000000013','00000000-0000-0000-0000-000000000102'),
-  ('10000000-0000-0000-0000-000000000014','00000000-0000-0000-0000-000000000102');
+  ('10000000-0000-0000-0000-000000000014','00000000-0000-0000-0000-000000000102'),
+  ('10000000-0000-0000-0000-000000000024','00000000-0000-0000-0000-000000000103'); -- admin
 
 -- ── Vendors ──────────────────────────────────────────────────
 -- Status: 1 = Active

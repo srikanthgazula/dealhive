@@ -1,6 +1,8 @@
+using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using GrouponClone.Application.Interfaces;
+using GrouponClone.Application.Features.Deals.Queries;
 using GrouponClone.Domain.Exceptions;
 
 namespace GrouponClone.Application.Features.Users;
@@ -108,25 +110,33 @@ public class ToggleWishlistCommandHandler : IRequestHandler<ToggleWishlistComman
     }
 }
 
-public record GetWishlistQuery : IRequest<IEnumerable<Guid>>;
+public record GetWishlistQuery : IRequest<IEnumerable<DealSummaryResponse>>;
 
-public class GetWishlistQueryHandler : IRequestHandler<GetWishlistQuery, IEnumerable<Guid>>
+public class GetWishlistQueryHandler : IRequestHandler<GetWishlistQuery, IEnumerable<DealSummaryResponse>>
 {
     private readonly ICurrentUserService _currentUser;
     private readonly IApplicationDbContext _db;
+    private readonly IMapper _mapper;
 
-    public GetWishlistQueryHandler(ICurrentUserService cu, IApplicationDbContext db)
+    public GetWishlistQueryHandler(ICurrentUserService cu, IApplicationDbContext db, IMapper mapper)
     {
-        _currentUser = cu; _db = db;
+        _currentUser = cu; _db = db; _mapper = mapper;
     }
 
-    public async Task<IEnumerable<Guid>> Handle(GetWishlistQuery req, CancellationToken ct)
+    public async Task<IEnumerable<DealSummaryResponse>> Handle(GetWishlistQuery req, CancellationToken ct)
     {
         var userId = _currentUser.UserId ?? throw new UnauthorizedException();
-        return await _db.WishlistItems
+
+        var deals = await _db.WishlistItems
             .AsNoTracking()
             .Where(w => w.UserId == userId)
-            .Select(w => w.DealId)
+            .Join(_db.Deals.AsNoTracking()
+                .Include(d => d.Vendor)
+                .Include(d => d.Category)
+                .Include(d => d.Images),
+                w => w.DealId, d => d.Id, (_, d) => d)
             .ToListAsync(ct);
+
+        return _mapper.Map<IEnumerable<DealSummaryResponse>>(deals);
     }
 }

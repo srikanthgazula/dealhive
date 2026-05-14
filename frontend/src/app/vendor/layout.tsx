@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { LayoutDashboard, Tag, PlusCircle, Store, LogOut } from 'lucide-react';
+import { LayoutDashboard, Tag, PlusCircle, Store, LogOut, ShoppingBag } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '@/store';
 import {
   logoutUser,
@@ -18,6 +18,7 @@ const NAV_ITEMS = [
   { href: '/vendor/dashboard', label: 'Dashboard',   icon: LayoutDashboard },
   { href: '/vendor/deals',     label: 'My Deals',    icon: Tag },
   { href: '/vendor/deals/new', label: 'Create Deal', icon: PlusCircle },
+  { href: '/vendor/orders',    label: 'Orders',      icon: ShoppingBag },
 ];
 
 export default function VendorLayout({ children }: { children: React.ReactNode }) {

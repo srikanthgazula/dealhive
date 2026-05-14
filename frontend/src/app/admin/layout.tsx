@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-import { LayoutDashboard, Tag, Store, LogOut, ShieldCheck } from 'lucide-react';
+import { LayoutDashboard, Tag, Store, LogOut, ShieldCheck, ShoppingBag } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '@/store';
 import {
   logoutUser,
@@ -18,6 +18,7 @@ const NAV_ITEMS = [
   { href: '/admin/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/admin/deals',     label: 'Deals',     icon: Tag },
   { href: '/admin/vendors',   label: 'Vendors',   icon: Store },
+  { href: '/admin/orders',    label: 'Orders',    icon: ShoppingBag },
 ];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {

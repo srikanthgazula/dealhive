@@ -4,14 +4,14 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { ShoppingBag, Ticket, Heart, User, LogOut } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '@/store';
-import { logout, logoutUser, selectIsAuthenticated, selectIsSessionRestoring, selectCurrentUser } from '@/store/slices/authSlice';
+import { logout, logoutUser, selectIsAuthenticated, selectIsSessionRestoring, selectCurrentUser, selectUserRole } from '@/store/slices/authSlice';
 import { cn } from '@/lib/utils';
 import { useEffect } from 'react';
 
 const NAV_ITEMS = [
   { href: '/account/orders',   label: 'My Orders',   icon: ShoppingBag },
   { href: '/account/groupons', label: 'My Vouchers', icon: Ticket },
-  { href: '/wishlist', label: 'Wishlist',    icon: Heart },
+  { href: '/account/wishlist', label: 'Wishlist', icon: Heart },
   { href: '/account/profile',  label: 'Profile',     icon: User },
 ];
 
@@ -22,13 +22,19 @@ export default function AccountLayout({ children }: { children: React.ReactNode 
   const isAuthenticated = useAppSelector(selectIsAuthenticated);
   const isSessionRestoring = useAppSelector(selectIsSessionRestoring);
   const user = useAppSelector(selectCurrentUser);
+  const role = useAppSelector(selectUserRole);
 
   // Wait for session restoration before deciding to redirect
   useEffect(() => {
-    if (!isSessionRestoring && !isAuthenticated) {
+    if (isSessionRestoring) return;
+    if (!isAuthenticated) {
       router.replace(`/login?redirect=${encodeURIComponent(pathname)}`);
+      return;
     }
-  }, [isAuthenticated, isSessionRestoring, pathname, router]);
+    // Vendors → vendor portal; Admins → admin portal
+    if (role === 'Vendor') { router.replace('/vendor/dashboard'); return; }
+    if (role === 'Admin' || role === 'SuperAdmin') { router.replace('/admin/dashboard'); return; }
+  }, [isAuthenticated, isSessionRestoring, role, pathname, router]);
 
   const handleLogout = async () => {
     await dispatch(logoutUser());
@@ -38,6 +44,7 @@ export default function AccountLayout({ children }: { children: React.ReactNode 
   // Show nothing while restoring session (avoids redirect flash)
   if (isSessionRestoring && !isAuthenticated) return null;
   if (!isAuthenticated) return null;
+  if (role === 'Vendor' || role === 'Admin' || role === 'SuperAdmin') return null;
 
   return (
     <div className="max-w-[1280px] mx-auto px-6 py-8">

@@ -4,7 +4,7 @@ import { useState, useCallback } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { CheckCircle, XCircle, ExternalLink, ChevronLeft, ChevronRight, AlertCircle } from 'lucide-react';
+import { CheckCircle, XCircle, ExternalLink, ChevronLeft, ChevronRight, AlertCircle, PauseCircle, PlayCircle } from 'lucide-react';
 import api from '@/lib/api';
 import { formatCurrency } from '@/lib/utils';
 import { cn } from '@/lib/utils';
@@ -31,12 +31,12 @@ interface PaginatedDealsResponse {
 }
 
 const STATUS_TABS = [
-  { label: 'All',     value: '' },
-  { label: 'Pending', value: 'PendingApproval' },
-  { label: 'Active',  value: 'Active' },
-  { label: 'Draft',   value: 'Draft' },
-  { label: 'Rejected',value: 'Rejected' },
-  { label: 'Paused',  value: 'Paused' },
+  { label: 'All',      value: '' },
+  { label: 'Pending',  value: 'PendingApproval' },
+  { label: 'Active',   value: 'Active' },
+  { label: 'Paused',   value: 'Paused' },
+  { label: 'Rejected', value: 'Rejected' },
+  { label: 'Expired',  value: 'Expired' },
 ];
 
 const STATUS_STYLES: Record<string, string> = {
@@ -87,10 +87,36 @@ export default function AdminDealsPage() {
     setActionLoading(id);
     try {
       await api.put(`/admin/deals/${id}/approve`);
-      showToast('Deal approved successfully.', true);
+      showToast('Deal approved.', true);
       invalidate();
     } catch {
       showToast('Failed to approve deal.', false);
+    } finally {
+      setActionLoading(null);
+    }
+  };
+
+  const handlePause = async (id: string) => {
+    setActionLoading(id);
+    try {
+      await api.put(`/admin/deals/${id}/pause`);
+      showToast('Deal paused.', true);
+      invalidate();
+    } catch {
+      showToast('Failed to pause deal.', false);
+    } finally {
+      setActionLoading(null);
+    }
+  };
+
+  const handleResume = async (id: string) => {
+    setActionLoading(id);
+    try {
+      await api.put(`/admin/deals/${id}/resume`);
+      showToast('Deal resumed.', true);
+      invalidate();
+    } catch {
+      showToast('Failed to resume deal.', false);
     } finally {
       setActionLoading(null);
     }
@@ -237,6 +263,7 @@ export default function AdminDealsPage() {
               {deal.status === 'PendingApproval' ? 'Pending' : deal.status}
             </span>
             <div className="flex items-center gap-1">
+              {/* PendingApproval → Approve or Reject */}
               {deal.status === 'PendingApproval' && (
                 <>
                   <button
@@ -257,6 +284,29 @@ export default function AdminDealsPage() {
                   </button>
                 </>
               )}
+              {/* Active → Pause */}
+              {deal.status === 'Active' && (
+                <button
+                  onClick={() => handlePause(deal.id)}
+                  disabled={actionLoading === deal.id}
+                  title="Pause deal"
+                  className="p-2 text-gray-400 hover:text-orange-600 hover:bg-orange-50 rounded-lg transition-colors disabled:opacity-40"
+                >
+                  <PauseCircle className="w-4 h-4" />
+                </button>
+              )}
+              {/* Paused → Resume */}
+              {deal.status === 'Paused' && (
+                <button
+                  onClick={() => handleResume(deal.id)}
+                  disabled={actionLoading === deal.id}
+                  title="Resume deal"
+                  className="p-2 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-lg transition-colors disabled:opacity-40"
+                >
+                  <PlayCircle className="w-4 h-4" />
+                </button>
+              )}
+              {/* Always: view public page */}
               <Link
                 href={`/deals/${deal.slug}`}
                 target="_blank"

@@ -9,6 +9,8 @@ import { formatCurrency, formatDate } from '@/lib/utils';
 import { cn } from '@/lib/utils';
 import type { Order } from '@/types';
 import type { PaginatedResponse } from '@/types';
+import { useAppSelector } from '@/store';
+import { selectIsSessionRestoring } from '@/store/slices/authSlice';
 
 const STATUS_COLORS: Record<string, string> = {
   Pending: 'bg-yellow-100 text-yellow-800',
@@ -19,9 +21,12 @@ const STATUS_COLORS: Record<string, string> = {
 };
 
 export default function OrdersPage() {
+  const isSessionRestoring = useAppSelector(selectIsSessionRestoring);
+
   const { data, isLoading, error } = useQuery({
     queryKey: ['orders'],
     queryFn: () => api.get<PaginatedResponse<Order>>('/orders').then((r) => r.data),
+    enabled: !isSessionRestoring,
   });
 
   if (isLoading) {
