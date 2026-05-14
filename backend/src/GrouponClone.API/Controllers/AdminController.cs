@@ -61,6 +61,12 @@ public class AdminController : ControllerBase
         await _mediator.Send(new AdminSuspendVendorCommand(id, request.Reason), ct);
         return NoContent();
     }
+
+    /// <summary>Get vendors with optional status filter.</summary>
+    [HttpGet("vendors")]
+    [ProducesResponseType(typeof(PaginatedAdminVendorsResponse), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetVendors([FromQuery] string? status, [FromQuery] int page = 1, [FromQuery] int pageSize = 20, CancellationToken ct = default)
+        => Ok(await _mediator.Send(new GetAdminVendorsQuery(status, page, pageSize), ct));
 }
 
 public record RejectDealRequest(string Reason);

@@ -183,3 +183,37 @@ public class GetAdminDealsQueryHandler : IRequestHandler<GetAdminDealsQuery, Pag
             total, req.Page, req.PageSize, pages);
     }
 }
+
+// ─── Get Admin Vendors ───────────────────────────────────────
+
+public record GetAdminVendorsQuery(string? Status = null, int Page = 1, int PageSize = 20)
+    : IRequest<PaginatedAdminVendorsResponse>;
+
+public record AdminVendorDto(Guid Id, string BusinessName, string Slug, string Status, string? City, int TotalDeals, decimal AvgRating, string CreatedAt);
+public record PaginatedAdminVendorsResponse(IEnumerable<AdminVendorDto> Items, int TotalCount, int Page, int PageSize, int TotalPages);
+
+public class GetAdminVendorsQueryHandler : IRequestHandler<GetAdminVendorsQuery, PaginatedAdminVendorsResponse>
+{
+    private readonly IApplicationDbContext _db;
+
+    public GetAdminVendorsQueryHandler(IApplicationDbContext db) => _db = db;
+
+    public async Task<PaginatedAdminVendorsResponse> Handle(GetAdminVendorsQuery req, CancellationToken ct)
+    {
+        var query = _db.Vendors.AsNoTracking().AsQueryable();
+
+        if (!string.IsNullOrEmpty(req.Status) && Enum.TryParse<Domain.Enums.VendorStatus>(req.Status, out var status))
+            query = query.Where(v => v.Status == status);
+
+        query = query.OrderByDescending(v => v.CreatedAt);
+
+        var total = await query.CountAsync(ct);
+        var items = await query.Skip((req.Page - 1) * req.PageSize).Take(req.PageSize).ToListAsync(ct);
+        var pages = (int)Math.Ceiling(total / (double)req.PageSize);
+
+        return new PaginatedAdminVendorsResponse(
+            items.Select(v => new AdminVendorDto(v.Id, v.BusinessName, v.Slug, v.Status.ToString(),
+                v.City, v.TotalDeals, v.AvgRating, v.CreatedAt.ToString("O"))),
+            total, req.Page, req.PageSize, pages);
+    }
+}
